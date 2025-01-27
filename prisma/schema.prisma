@@ -8,25 +8,25 @@ datasource db {
 }
 
 model countries{
-    time_zone_id Int @id()
+    time_zone_id Int @id @default(autoincrement())
     name String
       candidates   candidate[] @relation("CountryCandidates")
 }
 
 model languages{
-    time_zone_id Int @id()
+    time_zone_id Int @id @default(autoincrement())
     name String
     candidates   candidate[] @relation("CandidateLanguages")
 }
 
 model technologies{
-    time_zone_id Int @id()
+    technologies_id Int @id @default(autoincrement())
     name String
     candidates   candidate[] @relation("CandidateTechnologies")
 }
 
 model time_zone{
-    time_zone_id Int @id()
+    time_zone_id Int @id @default(autoincrement())
     name String
       candidates   candidate[] @relation("TimeZoneCandidates")
 }

@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "init:docker": "docker up -d",
-    "delete:docker": "docker down -d",
-    "migration:create": "npx prisma migrate dev --name"
+    "init:docker": "docker-compose up -d",
+    "delete:docker": "docker down",
+    "migration:create": "npx prisma migrate dev --name",
+    "database:seed": "node ./prisma/seed.mjs",
+    "database:delete-seed": "node ./prisma/deleteSeed.mjs"
   },
   "dependencies": {
     "@heroui/react": "^2.6.14",
@@ -19,7 +21,8 @@
     "framer-motion": "^12.0.5",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

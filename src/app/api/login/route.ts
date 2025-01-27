@@ -16,10 +16,14 @@ export async function POST(req: NextRequest) {
         email: body.email,
       },
     });
-    const compare = PasswordServices.comparePassword(
+    if (!workerLogin) {
+      throw new CustomError("User not found", 404);
+    }
+    const compare = await PasswordServices.comparePassword(
       body.password,
       workerLogin?.password ?? ""
     );
+    console.log(workerLogin);
     if (!compare) {
       throw new CustomError("Password doesnt match", 400);
     }
