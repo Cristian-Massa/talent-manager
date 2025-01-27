@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model countries{
+    time_zone_id Int @id()
+    name String
+      candidates   candidate[] @relation("CountryCandidates")
+}
+
+model languages{
+    time_zone_id Int @id()
+    name String
+    candidates   candidate[] @relation("CandidateLanguages")
+}
+
+model technologies{
+    time_zone_id Int @id()
+    name String
+    candidates   candidate[] @relation("CandidateTechnologies")
+}
+
+model time_zone{
+    time_zone_id Int @id()
+    name String
+      candidates   candidate[] @relation("TimeZoneCandidates")
+}
+
+model workers{
+    workers_id Int @id @default(autoincrement())
+    email String @unique
+    password String
+    created_at DateTime @default(now())
+}
+
+model candidate{
+    candidate_id Int @id
+    birth_day DateTime
+    country_id Int
+    time_zone_id Int
+    motivation_text String
+    languages_id Int
+    technologies_id Int
+    career_timeline String
+    educational_projects String
+    image String
+    firstname String
+    lastname String
+    email String @unique
+
+
+    // Relations
+
+    country           countries   @relation("CountryCandidates", fields: [country_id], references: [time_zone_id])
+    time_zone         time_zone   @relation("TimeZoneCandidates", fields: [time_zone_id], references: [time_zone_id])
+    languages         languages[] @relation("CandidateLanguages")
+    technologies      technologies[] @relation("CandidateTechnologies")
+}

@@ -1,0 +1,9 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  background-color: var(--light-dark-bg);
+  padding: var(--container-padding);
+  border-radius: var(--radius);
+}
