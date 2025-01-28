@@ -3,10 +3,8 @@ const prisma = new PrismaClient();
 
 async function deleteSeedData() {
   try {
-    // Borrar usuarios
     await prisma.workers.deleteMany({});
 
-    // Borrar tecnologías
     await prisma.technologies.deleteMany({});
 
     console.log("Seed data deleted successfully!");

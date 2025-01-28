@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Ejemplo: Crear usuarios
   await prisma.workers.createMany({
     data: [
       {
@@ -17,7 +16,6 @@ async function main() {
     ],
   });
 
-  // Ejemplo: Crear tecnologías
   await prisma.technologies.createMany({
     data: [{ name: "React" }, { name: "Node.js" }, { name: "TypeScript" }],
   });
