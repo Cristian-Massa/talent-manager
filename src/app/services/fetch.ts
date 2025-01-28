@@ -3,15 +3,16 @@ import { HttpMethods } from "@/app/types/httpMethods";
 export async function customFetch(
   endpoint: string,
   method: HttpMethods,
-  body?: object | FormData // Permitir tanto FormData como objetos normales
+  body?: object | FormData
 ) {
+  console.log(endpoint, "este es el endpoint");
   try {
     const data = await fetch(endpoint, {
       method: method,
       headers:
         body instanceof FormData
-          ? undefined // No se necesita encabezado adicional para FormData
-          : { "Content-Type": "application/json" }, // Solo agrega esto para objetos JSON
+          ? undefined
+          : { "Content-Type": "application/json" },
       body:
         method === "GET"
           ? undefined
@@ -21,10 +22,10 @@ export async function customFetch(
       // credentials: process.env.NODE_ENV === "production" ? "include" : "omit",
     });
 
-    if (!data.ok) {
-      throw new Error("Fetch cannot be done");
-    }
     const response = await data.json();
+    if (!data.ok) {
+      throw new Error(response.error);
+    }
     return response;
   } catch (err) {
     return (err as Error).message;

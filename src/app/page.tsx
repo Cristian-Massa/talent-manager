@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <Link href={"/login"}>
-        <button>Login</button>
+        <button>Im worker</button>
       </Link>
       <Link href={"/candidate"}>
         <button>Im candidate</button>

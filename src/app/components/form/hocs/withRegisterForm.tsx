@@ -1,32 +1,22 @@
-import { login } from "@/app/services/login";
 import { Input } from "@heroui/react";
-import { ChangeEvent, ComponentType, useState } from "react";
+import { ComponentType } from "react";
 
 export function withRegisterForm<T extends object>(
   Component: ComponentType<T>
 ) {
   return function WrappedComponent(props: T) {
-    const [userData, setUserData] = useState({
-      email: "",
-      password: "",
-      confirm_password: "",
-    });
-
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
-      setUserData({
-        ...userData,
-        [e.currentTarget.name]: e.currentTarget.value,
-      });
+    async function handleSubmit(formData: FormData) {
+      // const password = form
+      formData.delete("confirm_password");
     }
     return (
-      <Component {...props}>
+      <Component {...props} action={handleSubmit}>
         <Input
           isRequired
           label="Email"
           labelPlacement="outside"
           name="email"
           placeholder="Enter your email"
-          onChange={handleChange}
         />
         <Input
           isRequired
@@ -34,7 +24,6 @@ export function withRegisterForm<T extends object>(
           labelPlacement="outside"
           name="password"
           placeholder="Enter your password"
-          onChange={handleChange}
         />
         <Input
           isRequired
@@ -42,9 +31,8 @@ export function withRegisterForm<T extends object>(
           labelPlacement="outside"
           name="confirm_password"
           placeholder="Confirm your password"
-          onChange={handleChange}
         />
-        <button onClick={(e) => login(e, userData)}>Register</button>
+        <button type="submit">Register</button>
       </Component>
     );
   };

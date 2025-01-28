@@ -1,29 +1,27 @@
-import { login } from "@/app/services/login";
+"use client";
+import { authAction } from "@/app/actions/authAction";
 import { Input } from "@heroui/react";
-import { ChangeEvent, ComponentType, useState } from "react";
+import { ComponentType, useEffect, useState } from "react";
+// import { useFormState } from "react-dom";
 
 export function withLoginForm<T extends object>(Component: ComponentType<T>) {
   return function WrappedComponent(props: T) {
-    const [userData, setUserData] = useState({
-      email: "",
-      password: "",
-    });
-
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
-      setUserData({
-        ...userData,
-        [e.currentTarget.name]: e.currentTarget.value,
-      });
+    const [status, setStatus] = useState<string | null>(null);
+    async function handleSubmit(formData: FormData) {
+      const result = await authAction(formData);
+      return setStatus(result);
     }
+    useEffect(() => {
+      console.log(status);
+    });
     return (
-      <Component {...props}>
+      <Component {...props} action={handleSubmit}>
         <Input
           isRequired
           label="Email"
           labelPlacement="outside"
           name="email"
           placeholder="Enter your email"
-          onChange={handleChange}
         />
         <Input
           isRequired
@@ -31,9 +29,9 @@ export function withLoginForm<T extends object>(Component: ComponentType<T>) {
           labelPlacement="outside"
           name="password"
           placeholder="Enter your password"
-          onChange={handleChange}
         />
-        <button onClick={(e) => login(e, userData)}>log in</button>
+        <button type="submit">log in</button>
+        <p>{status && status}</p>
       </Component>
     );
   };
