@@ -1,12 +1,12 @@
-// import { RegisterForm } from "@/app/components/form/Form";
-import styles from "./register.module.css";
+import { RegisterForm } from "@/app/components/form/Form";
+import { Button } from "@heroui/button";
 import Link from "next/link";
 export default function Register() {
   return (
-    <main className={styles.page}>
-      {/* <RegisterForm /> */}
+    <main className="flex flex-col justify-center items-center h-screen gap-10">
+      <RegisterForm />
       <Link href={"/login"}>
-        <button>Login</button>
+        <Button>Login</Button>
       </Link>
     </main>
   );

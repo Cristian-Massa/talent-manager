@@ -1,5 +1,5 @@
-import { CustomError } from "@/app/services/customError";
 import { PasswordServices } from "@/app/services/passwordServices";
+import { CustomError } from "@/app/utils/customError";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!body.email || !body.password) {
       throw new CustomError("Information incompleted", 400);
     }
-    const workerLogin = await prismaClient.workers.findFirst({
+    const workerLogin = await prismaClient.users.findFirst({
       where: {
         email: body.email,
       },

@@ -8,13 +8,13 @@ datasource db {
 }
 
 model countries{
-    time_zone_id Int @id @default(autoincrement())
+    countries_id Int @id @default(autoincrement())
     name String
       candidates   candidate[] @relation("CountryCandidates")
 }
 
 model languages{
-    time_zone_id Int @id @default(autoincrement())
+    languages_id Int @id @default(autoincrement())
     name String
     candidates   candidate[] @relation("CandidateLanguages")
 }
@@ -28,36 +28,76 @@ model technologies{
 model time_zone{
     time_zone_id Int @id @default(autoincrement())
     name String
-      candidates   candidate[] @relation("TimeZoneCandidates")
+    candidates   candidate[] @relation("TimeZoneCandidates")
 }
 
-model workers{
-    workers_id Int @id @default(autoincrement())
+model career_timeline{
+  career_timeline_id Int @id @default(autoincrement())
+  company_name String
+  position String
+  time_in_position String
+  description String
+  candidates   candidate[] @relation("CandidateCareerTimeline")
+}
+
+model institute{
+  institute_id Int @id @default(autoincrement())
+  name String
+  educational_projects   educational_projects[] @relation("EducationalProjects")
+}
+
+model educational_projects{
+  career_timeline_id Int @id @default(autoincrement())
+  institute_id Int
+  position String
+  time_in_position String
+  description String
+  institute   institute   @relation("EducationalProjects", fields: [institute_id], references: [institute_id])
+  candidates   candidate[] @relation("CandidateEducationalProjects")
+}
+
+
+model verify_token{
+  verify_token_id Int @id @default(autoincrement())
+  token String @unique
+  expires_at DateTime
+  users users?
+}
+  
+model users{
+    user_id Int @id @default(autoincrement())
     email String @unique
     password String
+    role String
+    verified Boolean
+    verify_token_id Int @unique
     created_at DateTime @default(now())
+    candidate candidate?
+    verify_token verify_token @relation(fields: [verify_token_id], references: [verify_token_id])
+
 }
 
 model candidate{
-    candidate_id Int @id
+    candidate_id Int @id @default(autoincrement())
     birth_day DateTime
     country_id Int
     time_zone_id Int
     motivation_text String
     languages_id Int
     technologies_id Int
-    career_timeline String
-    educational_projects String
+    career_timeline_id Int
+    educational_projects_id Int
     image String
     firstname String
     lastname String
-    email String @unique
-
+    user_id Int @unique
 
     // Relations
-
-    country           countries   @relation("CountryCandidates", fields: [country_id], references: [time_zone_id])
-    time_zone         time_zone   @relation("TimeZoneCandidates", fields: [time_zone_id], references: [time_zone_id])
-    languages         languages[] @relation("CandidateLanguages")
-    technologies      technologies[] @relation("CandidateTechnologies")
+    user users @relation(fields: [user_id], references: [user_id])
+    country              countries   @relation("CountryCandidates", fields: [country_id], references: [countries_id])
+    time_zone            time_zone   @relation("TimeZoneCandidates", fields: [time_zone_id], references: [time_zone_id])
+    languages            languages[] @relation("CandidateLanguages")
+    technologies         technologies[] @relation("CandidateTechnologies")
+    career_timeline      career_timeline[] @relation("CandidateCareerTimeline")
+    educational_projects educational_projects[] @relation("CandidateEducationalProjects")
 }

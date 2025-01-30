@@ -5,7 +5,6 @@ export async function customFetch(
   method: HttpMethods,
   body?: object | FormData
 ) {
-  console.log(endpoint, "este es el endpoint");
   try {
     const data = await fetch(endpoint, {
       method: method,
@@ -28,6 +27,6 @@ export async function customFetch(
     }
     return response;
   } catch (err) {
-    return (err as Error).message;
+    return { error: (err as Error).message };
   }
 }
