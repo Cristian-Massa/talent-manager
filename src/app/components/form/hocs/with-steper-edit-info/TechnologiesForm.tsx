@@ -5,31 +5,31 @@ import { Listbox, ListboxItem, Chip, Spinner } from "@heroui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-interface ILanguages {
-  languages: {
-    languages_id: number;
+interface ITechnologies {
+  technologies: {
+    technologies_id: number;
     name: string;
   }[];
 }
 
-export function LanguagesForm() {
-  const { data, isLoading } = useGetData<ILanguages>("/api/languages");
+export function TechnologiesForm() {
+  const { data, isLoading } = useGetData<ITechnologies>("/api/technologies");
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set([]));
   const { register, setValue, formState, trigger } = useFormContext();
 
   const selectedValue = useMemo(
     () =>
       Array.from(selectedKeys).map((key) => {
-        const index = key.split(".").at(-1);
-
-        return data?.languages.find(
-          (language) => language.languages_id === Number(index)
+        if (!data) return null;
+        console.log(key);
+        return data.technologies.find(
+          (technology) => technology.technologies_id === Number(key)
         );
       }),
     [selectedKeys, data]
   );
   useEffect(() => {
-    setValue("languages", selectedValue);
+    setValue("technologies", selectedValue);
     trigger();
   }, [selectedValue, setValue, trigger]);
   return (
@@ -43,41 +43,41 @@ export function LanguagesForm() {
             disallowEmptySelection={false}
             selectedKeys={selectedKeys}
             selectionMode="multiple"
-            variant="flat"
+            variant="light"
             onSelectionChange={(keys) => {
               setSelectedKeys(new Set(keys as unknown as string[]));
             }}
           >
-            {data?.languages && data.languages.length > 0 ? (
-              data.languages.map((language) => {
+            {data &&
+              data.technologies.map((technology) => {
                 return (
-                  <ListboxItem className="w-full" key={language.languages_id}>
-                    {language.name}
+                  <ListboxItem
+                    className="w-full"
+                    key={technology.technologies_id}
+                  >
+                    {technology.name}
                   </ListboxItem>
                 );
-              })
-            ) : (
-              <></>
-            )}
+              })}
           </Listbox>
         )}
       </div>
       <div className="min-h-10 flex overflow-x-auto gap-2">
         {selectedValue.map((chips) => {
-          return <Chip key={chips?.languages_id}>{chips?.name}</Chip>;
+          return <Chip key={chips?.technologies_id}>{chips?.name}</Chip>;
         })}
       </div>
       <input
         type="hidden"
-        {...register("languages", {
+        {...register("technologies", {
           validate: (value) =>
-            value?.length > 0 || "Please select at least one language",
+            value?.length > 0 || "Please select at least one technology",
         })}
       />
       <div className="min-h-10">
         {!isLoading && (
           <p className="text-red-500 text-sm mt-4">
-            {(formState.errors.languages?.message as string) ?? ""}
+            {(formState.errors.technologies?.message as string) ?? ""}
           </p>
         )}
       </div>
